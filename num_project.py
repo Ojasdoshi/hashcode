@@ -33,9 +33,9 @@ class Project:
         self.active_contributors.append(contributor)
 
     def is_proj_spec_satisfied(self, list_contributors):
-        for contributor in list_contributors:
-            if any( contributor.has_skill(skill, level) for skill, level in self.require_skills.items()):
-                return True
+        if len(list_contributors) == len(self.require_skills.keys()):
+            for contributor in list_contributors:
+                self.add_contributor(contributor)
             
 
 
@@ -93,11 +93,9 @@ def execution(projects, contributors):
                     if contributor.has_skill(skill, level) :
                         # prj.add_contributor(contributor)
                         prj_contri.append(contributor)
-                
+                        break
 
-                
-
-                            
+            prj.is_proj_spec_satisfied(prj_contri)                
                         
         days = days + 1
         
