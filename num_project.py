@@ -79,9 +79,8 @@ def execution(projects, contributors):
         for prj in available_projects:
             for skill, level in prj.require_skills.items():
                 for contributor in contributors:
-                    if (skill, level) in contributor.Skills.items():
+                    if contributor.has_skill(skill, level) :
                         prj.add_role(contributor)
-                        prj.has_skill()
                         break
                 contributors.remove(contributor)
 
