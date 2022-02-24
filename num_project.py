@@ -14,6 +14,7 @@ class Contributor:
             if self.skills[skill] >= level:
                 return True
         return False
+    
 
 class Project:
 
@@ -37,8 +38,13 @@ class Project:
             for contributor, skill in list_contributors:
                 self.add_contributor(contributor, skill)
             
-
-
+    def post_realease(self):
+        for contributor in self.active_contributors:
+            for skill in self.require_skills: 
+                if contributor.has_skill(skill,self.require_skills[skill]):
+                    self.roles[contributor] = skill
+                    break
+            return skill
 def main():
 
     with open('input_data/a_an_example.in.txt') as f:
@@ -85,7 +91,11 @@ def execution(projects, contributors):
     available_projects = sorted(projects, key=lambda prj:prj.score, reverse=True)
     projects_completed = False
     prj_execution = list()
+    ans = list()
     while not projects_completed:
+        released_prj, released_contri = project_release(prj_execution,days)
+        contributors.extend(released_contri)
+        ans.extend(released_prj)
         for prj in available_projects:
             prj_contri = list()
             for skill, level in prj.require_skills.items():
