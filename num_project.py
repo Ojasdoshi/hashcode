@@ -8,6 +8,12 @@ class Contributor:
 
     def add_skills(self,skill,level):
         self.Skill[skill] = int(level)
+    
+    def has_skill(self, skill, level):
+        if skill in self.skills:
+            if self.skills[skill] >= level:
+                return True
+        return False
 
 class Project:
 
@@ -64,6 +70,7 @@ def main():
         for project_name, roles_assign in assign_project_roles.items():
             print(f'{project_name}')
             print(' '.join(roles_assign))
+
 def execution(projects, contributors):
     days = 0
     available_projects = sorted(projects, key=lambda prj:prj.score, reverse=True)
@@ -73,9 +80,11 @@ def execution(projects, contributors):
         for prj in available_projects:
             for skill, level in prj.require_skills.items():
                 for contributor in contributors:
-                    if (skill, level) in contributor.Skills.items():
+                    if contributor.has_skill(skill, level) :
                         prj.add_role(contributor)
                         break
+                contributors.remove(contributor)
         days = days + 1
+
 
 main()
