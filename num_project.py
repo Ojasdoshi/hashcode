@@ -7,7 +7,7 @@ class Contributor:
         self.Skill = dict()
 
     def add_skills(self,skill,level):
-        self.Skill[skill] = level
+        self.Skill[skill] = int(level)
 
 class Project:
 
@@ -21,7 +21,7 @@ class Project:
         self.require_skills = dict()
 
     def add_required_skills(self,skill,level):
-        self.require_skills[skill]  = level
+        self.require_skills[skill]  = int(level)
 
 def main():
 
@@ -36,6 +36,7 @@ def main():
                 skill,level = f.readline().split(' ')
                 contrib_cls.add_skills(skill,level)
             contibutors.append(contrib_cls)
+
         
         projects = list()
         for i in range(int(no_of_projects)):
@@ -48,17 +49,33 @@ def main():
         
         assign_project_roles = dict()
         for project in projects:
-            required_skills  = project.require_skills.keys()
             assign_project_roles[project.project_name] = list()
             for contributor in contibutors:
-                skills = contributor.Skill.keys()
-                if skills in required_skills:
-                    assign_project_roles[project.project_name].append(contributor.name)
+                for skill,level in contributor.Skill.items():
+                    for req_skill,re_level in project.require_skills.items():
+                        if skill == req_skill and level >= re_level:
+                            # contributor.Skill[skill] = contributor.Skill[skill] + 1
+                            assign_project_roles[project.project_name].append(contributor.name)
+        
         assigned_projects = len(assign_project_roles)
+        
         print(f'{assigned_projects}')
 
         for project_name, roles_assign in assign_project_roles.items():
             print(f'{project_name}')
-            print('\n'.join(roles_assign))
+            print(' '.join(roles_assign))
+def execution(projects, contributors):
+    days = 0
+    available_projects = sorted(projects, key=lambda prj:prj.score, reverse=True)
+    projects_completed = False
+    prj_execution = list()
+    while not projects_completed:
+        for prj in available_projects:
+            for skill, level in prj.require_skills.items():
+                for contributor in contributors:
+                    if (skill, level) in contributor.Skills.items():
+                        prj.add_role(contributor)
+                        break
+        days = days + 1
 
 main()
