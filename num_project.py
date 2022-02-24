@@ -80,7 +80,11 @@ def execution(projects, contributors):
     available_projects = sorted(projects, key=lambda prj:prj.score, reverse=True)
     projects_completed = False
     prj_execution = list()
+    ans = list()
     while not projects_completed:
+        released_prj, released_contri = project_release(prj_execution,days)
+        contributors.extend(released_contri)
+        ans.extend(released_prj)
         for prj in available_projects:
             prj_contri = list()
             for skill, level in prj.require_skills.items():
@@ -89,15 +93,22 @@ def execution(projects, contributors):
                         prj.add_contributor(contributor)
                         break
                 prj_contri.append(contributor)
-                
-
-                
-
-                            
+                        
                         
         days = days + 1
         
-def calculation(self,project,contributors ):
-    ''''''
+def project_release(prj_execution,current_day ):
+    '''
+    '''
+    released_contri = list()
+    released_proj = list()
+    for prj, start_day in prj_execution:
+        if (current_day - start_day) > prj.required_days:
+            released_contri.extend(prj.active_contributors)
+            released_proj.append(prj)
+    
+    return released_proj, released_contri
+            
+    
 
 main()
