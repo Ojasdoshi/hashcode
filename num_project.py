@@ -30,8 +30,8 @@ class Project:
         self.require_skills[skill]  = int(level)
 
     def add_contributor(self, contributor):
-        assert(self.active_contributors == self.roles)
-        self.active_contributors.append(contributor)
+         self.active_contributors.append(contributor)
+            
 
 
 def main():
@@ -59,12 +59,13 @@ def main():
 
         assign_project_roles = dict()
         for project in projects:
+            required_skills  = project.require_skills.keys()
             assign_project_roles[project.project_name] = list()
             for contributor in contibutors:
-                for skill,level in contributor.skills.items():
-                    for req_skill,req_level in project.require_skills.items():
-                        if skill == req_skill and level >= req_level:
-                            assign_project_roles[project.project_name].append(contributor.name)
+                skills = contributor.skills.keys()
+                for skill_key in skills:
+                    if skill_key in required_skills and project.require_skills[skill_key] >= contributor.skills[skill_key]:
+                        assign_project_roles[project.project_name].append(contributor.name)
         assigned_projects = len(assign_project_roles)
 
 
@@ -79,7 +80,11 @@ def execution(projects, contributors):
     available_projects = sorted(projects, key=lambda prj:prj.score, reverse=True)
     projects_completed = False
     prj_execution = list()
+    ans = list()
     while not projects_completed:
+        released_prj, released_contri = project_release(prj_execution,days)
+        contributors.extend(released_contri)
+        ans.extend(released_prj)
         for prj in available_projects:
             prj_contri = list()
             for skill, level in prj.require_skills.items():
@@ -88,9 +93,22 @@ def execution(projects, contributors):
                         prj.add_contributor(contributor)
                         break
                 prj_contri.append(contributor)
+                        
+                        
         days = days + 1
         
-def calculation(self,project,contributors ):
-    ''''''
+def project_release(prj_execution,current_day ):
+    '''
+    '''
+    released_contri = list()
+    released_proj = list()
+    for prj, start_day in prj_execution:
+        if (current_day - start_day) > prj.required_days:
+            released_contri.extend(prj.active_contributors)
+            released_proj.append(prj)
+    
+    return released_proj, released_contri
+            
+    
 
 main()
