@@ -63,4 +63,21 @@ def main():
             print(f'{project_name}')
             print('\n'.join(roles_assign))
 
+def execution(projects, contributors):
+    days = 0
+    available_projects = sorted(projects, key=lambda prj:prj.score, reverse=True)
+    projects_completed = False
+    prj_execution = list()
+    while not projects_completed:
+        for prj in available_projects:
+            for skill, level in prj.require_skills.items():
+                for contributor in contributors:
+                    if (skill, level) in contributor.Skills.items():
+                        prj.add_role(contributor)
+                        break
+                
+                            
+                        
+        days = days + 1
+
 main()
