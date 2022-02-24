@@ -45,22 +45,23 @@ def main():
                 skill,level = f.readline().split()
                 project.add_required_skills(skill,level)
             projects.append(project)
-        
+
         assign_project_roles = dict()
         for project in projects:
             required_skills  = project.require_skills.keys()
             assign_project_roles[project.project_name] = list()
             for contributor in contibutors:
                 skills = contributor.Skill.keys()
-                print(required_skills)
-                print(skills)
-                if skills in required_skills:
-                    assign_project_roles[project.project_name].append(contributor.name)
+                for skill_key in skills:
+                    if skill_key in required_skills and project.require_skills[skill_key] >= contributor.Skill[skill_key]:
+                        assign_project_roles[project.project_name].append(contributor.name)
         assigned_projects = len(assign_project_roles)
+
+
         print(f'{assigned_projects}')
 
         for project_name, roles_assign in assign_project_roles.items():
             print(f'{project_name}')
-            print('\n'.join(roles_assign))
+            print(' '.join(roles_assign))
 
 main()
