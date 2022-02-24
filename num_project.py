@@ -7,7 +7,7 @@ class Contributor:
         self.skills = dict()
 
     def add_skills(self,skill,level):
-        self.skills[skill] = level
+        self.skills[skill] = int(level)
         
     def has_skill(self, skill, level):
         if skill in self.skills:
@@ -27,7 +27,7 @@ class Project:
         self.require_skills = dict()
 
     def add_required_skills(self,skill,level):
-        self.require_skills[skill]  = level
+        self.require_skills[skill]  = int(level)
 
     def add_contributor(self, contributor):
         assert(self.active_contributors == self.roles)
@@ -59,13 +59,12 @@ def main():
 
         assign_project_roles = dict()
         for project in projects:
-            required_skills  = project.require_skills.keys()
             assign_project_roles[project.project_name] = list()
             for contributor in contibutors:
-                skills = contributor.skills.keys()
-                for skill_key in skills:
-                    if skill_key in required_skills and project.require_skills[skill_key] >= contributor.skills[skill_key]:
-                        assign_project_roles[project.project_name].append(contributor.name)
+                for skill,level in contributor.skills.items():
+                    for req_skill,req_level in project.require_skills.items():
+                        if skill == req_skill and level >= req_level:
+                            assign_project_roles[project.project_name].append(contributor.name)
         assigned_projects = len(assign_project_roles)
 
 
