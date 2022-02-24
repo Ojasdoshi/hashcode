@@ -30,7 +30,12 @@ class Project:
         self.require_skills[skill]  = level
 
     def add_contributor(self, contributor):
-         self.active_contributors.append(contributor)
+        self.active_contributors.append(contributor)
+
+    def is_proj_spec_satisfied(self, list_contributors):
+        for contributor in list_contributors:
+            if any( contributor.has_skill(skill, level) for skill, level in self.require_skills.items()):
+                return True
             
 
 
@@ -86,9 +91,8 @@ def execution(projects, contributors):
             for skill, level in prj.require_skills.items():
                 for contributor in contributors:
                     if contributor.has_skill(skill, level) :
-                        prj.add_contributor(contributor)
-                        break
-                prj_contri.append(contributor)
+                        # prj.add_contributor(contributor)
+                        prj_contri.append(contributor)
                 
 
                 
