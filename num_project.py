@@ -91,7 +91,11 @@ def execution(projects, contributors):
     available_projects = sorted(projects, key=lambda prj:prj.score, reverse=True)
     projects_completed = False
     prj_execution = list()
+    ans = list()
     while not projects_completed:
+        released_prj, released_contri = project_release(prj_execution,days)
+        contributors.extend(released_contri)
+        ans.extend(released_prj)
         for prj in available_projects:
             prj_contri = list()
             for skill, level in prj.require_skills.items():
