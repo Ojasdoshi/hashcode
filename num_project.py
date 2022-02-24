@@ -68,15 +68,8 @@ def main():
                 project.add_required_skills(skill,level)
             projects.append(project)
 
-        assign_project_roles = dict()
-        for project in projects:
-            required_skills  = project.require_skills.keys()
-            assign_project_roles[project.project_name] = list()
-            for contributor in contibutors:
-                skills = contributor.skills.keys()
-                for skill_key in skills:
-                    if skill_key in required_skills and project.require_skills[skill_key] >= contributor.skills[skill_key]:
-                        assign_project_roles[project.project_name].append(contributor.name)
+        assign_project_roles = execution(projects=projects,contributors=contibutors)
+
         assigned_projects = len(assign_project_roles)
 
 
@@ -108,6 +101,8 @@ def execution(projects, contributors):
             prj.is_proj_spec_satisfied(prj_contri)                
                         
         days = days + 1
+
+    return ans
 
 def project_release(prj_execution,current_day ):
     '''
