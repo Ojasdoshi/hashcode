@@ -14,6 +14,7 @@ class Contributor:
             if self.skills[skill] >= level:
                 return True
         return False
+    
 
 class Project:
 
@@ -32,8 +33,13 @@ class Project:
     def add_contributor(self, contributor):
          self.active_contributors.append(contributor)
             
-
-
+    def post_realease(self):
+        for contributor in self.active_contributors:
+            for skill in self.require_skills: 
+                if contributor.has_skill(skill,self.require_skills[skill]):
+                    self.roles[contributor] = skill
+                    break
+            return skill
 def main():
 
     with open('input_data/a_an_example.in.txt') as f:
