@@ -7,7 +7,7 @@ class Contributor:
         self.skills = dict()
 
     def add_skills(self,skill,level):
-        self.skills[skill] = level
+        self.skills[skill] = int(level)
         
     def has_skill(self, skill, level):
         if skill in self.skills:
@@ -27,7 +27,7 @@ class Project:
         self.require_skills = dict()
 
     def add_required_skills(self,skill,level):
-        self.require_skills[skill]  = level
+        self.require_skills[skill]  = int(level)
 
     def add_contributor(self, contributor):
         self.active_contributors.append(contributor)
@@ -98,8 +98,17 @@ def execution(projects, contributors):
             prj.is_proj_spec_satisfied(prj_contri)                
                         
         days = days + 1
-        
-def calculation(self,project,contributors ):
-    ''''''
 
+def project_release(prj_execution,current_day ):
+    '''
+    '''
+    released_contri = list()
+    released_proj = list()
+    for prj, start_day in prj_execution:
+        if (current_day - start_day) > prj.required_days:
+            released_contri.extend(prj.active_contributors)
+            released_proj.append(prj)
+    
+    return released_proj, released_contri
+            
 main()
