@@ -23,19 +23,19 @@ class Project:
         self.score= score
         self.best_before = best_before
         self.roles = roles
-        self.active_contributors = list()
+        self.active_contributors = dict()
         self.require_skills = dict()
 
     def add_required_skills(self,skill,level):
         self.require_skills[skill]  = int(level)
 
-    def add_contributor(self, contributor):
-        self.active_contributors.append(contributor)
+    def add_contributor(self, contributor, skill):
+        self.active_contributors[skill] = contributor
 
     def is_proj_spec_satisfied(self, list_contributors):
         if len(list_contributors) == len(self.require_skills.keys()):
-            for contributor in list_contributors:
-                self.add_contributor(contributor)
+            for contributor, skill in list_contributors:
+                self.add_contributor(contributor, skill)
             
 
 
@@ -92,7 +92,7 @@ def execution(projects, contributors):
                 for contributor in contributors:
                     if contributor.has_skill(skill, level) :
                         # prj.add_contributor(contributor)
-                        prj_contri.append(contributor)
+                        prj_contri.append((contributor, skill))
                         break
 
             prj.is_proj_spec_satisfied(prj_contri)                
