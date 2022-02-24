@@ -23,11 +23,16 @@ class Project:
         self.score= score
         self.best_before = best_before
         self.roles = roles
-
+        self.active_contributors = list()
         self.require_skills = dict()
 
     def add_required_skills(self,skill,level):
         self.require_skills[skill]  = level
+
+    def add_contributor(self, contributor):
+        assert(self.active_contributors == self.roles)
+        self.active_contributors.append(contributor)
+
 
 def main():
 
@@ -81,7 +86,7 @@ def execution(projects, contributors):
             for skill, level in prj.require_skills.items():
                 for contributor in contributors:
                     if contributor.has_skill(skill, level) :
-                        prj.add_role(contributor)
+                        prj.add_contributor(contributor)
                         break
                 prj_contri.append(contributor)
                 
