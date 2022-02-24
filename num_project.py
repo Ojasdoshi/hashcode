@@ -30,8 +30,8 @@ class Project:
         self.require_skills[skill]  = level
 
     def add_contributor(self, contributor):
-        assert(self.active_contributors == self.roles)
-        self.active_contributors.append(contributor)
+         self.active_contributors.append(contributor)
+            
 
 
 def main():
