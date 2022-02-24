@@ -4,11 +4,11 @@ class Contributor:
         self.name = name
         self.no_of_skill = no_of_skill
 
-        self.Skill = dict()
+        self.skills = dict()
 
     def add_skills(self,skill,level):
-        self.Skill[skill] = int(level)
-    
+        self.skills[skill] = level
+        
     def has_skill(self, skill, level):
         if skill in self.skills:
             if self.skills[skill] >= level:
@@ -23,11 +23,16 @@ class Project:
         self.score= score
         self.best_before = best_before
         self.roles = roles
-
+        self.active_contributors = list()
         self.require_skills = dict()
 
     def add_required_skills(self,skill,level):
-        self.require_skills[skill]  = int(level)
+        self.require_skills[skill]  = level
+
+    def add_contributor(self, contributor):
+        assert(self.active_contributors == self.roles)
+        self.active_contributors.append(contributor)
+
 
 def main():
 
@@ -42,7 +47,6 @@ def main():
                 skill,level = f.readline().split(' ')
                 contrib_cls.add_skills(skill,level)
             contibutors.append(contrib_cls)
-
         
         projects = list()
         for i in range(int(no_of_projects)):
@@ -52,19 +56,19 @@ def main():
                 skill,level = f.readline().split()
                 project.add_required_skills(skill,level)
             projects.append(project)
-        
+
         assign_project_roles = dict()
         for project in projects:
+            required_skills  = project.require_skills.keys()
             assign_project_roles[project.project_name] = list()
             for contributor in contibutors:
-                for skill,level in contributor.Skill.items():
-                    for req_skill,re_level in project.require_skills.items():
-                        if skill == req_skill and level >= re_level:
-                            # contributor.Skill[skill] = contributor.Skill[skill] + 1
-                            assign_project_roles[project.project_name].append(contributor.name)
-        
+                skills = contributor.skills.keys()
+                for skill_key in skills:
+                    if skill_key in required_skills and project.require_skills[skill_key] >= contributor.skills[skill_key]:
+                        assign_project_roles[project.project_name].append(contributor.name)
         assigned_projects = len(assign_project_roles)
-        
+
+
         print(f'{assigned_projects}')
 
         for project_name, roles_assign in assign_project_roles.items():
@@ -81,10 +85,14 @@ def execution(projects, contributors):
             for skill, level in prj.require_skills.items():
                 for contributor in contributors:
                     if contributor.has_skill(skill, level) :
-                        prj.add_role(contributor)
+                        prj.add_contributor(contributor)
                         break
                 contributors.remove(contributor)
-        days = days + 1
 
+                
+            
+                            
+                        
+        days = days + 1
 
 main()
