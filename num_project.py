@@ -81,17 +81,16 @@ def execution(projects, contributors):
     prj_execution = list()
     while not projects_completed:
         for prj in available_projects:
+            prj_contri = list()
             for skill, level in prj.require_skills.items():
                 for contributor in contributors:
                     if contributor.has_skill(skill, level) :
                         prj.add_contributor(contributor)
                         break
-                contributors.remove(contributor)
-
-                
-            
-                            
-                        
+                prj_contri.append(contributor)
         days = days + 1
+        
+def calculation(self,project,contributors ):
+    ''''''
 
 main()
