@@ -31,7 +31,12 @@ class Project:
         self.require_skills[skill]  = int(level)
 
     def add_contributor(self, contributor):
-         self.active_contributors.append(contributor)
+        self.active_contributors.append(contributor)
+
+    def is_proj_spec_satisfied(self, list_contributors):
+        if len(list_contributors) == len(self.require_skills.keys()):
+            for contributor in list_contributors:
+                self.add_contributor(contributor)
             
     def post_realease(self):
         for contributor in self.active_contributors:
@@ -86,23 +91,20 @@ def execution(projects, contributors):
     available_projects = sorted(projects, key=lambda prj:prj.score, reverse=True)
     projects_completed = False
     prj_execution = list()
-    ans = list()
     while not projects_completed:
-        released_prj, released_contri = project_release(prj_execution,days)
-        contributors.extend(released_contri)
-        ans.extend(released_prj)
         for prj in available_projects:
             prj_contri = list()
             for skill, level in prj.require_skills.items():
                 for contributor in contributors:
                     if contributor.has_skill(skill, level) :
-                        prj.add_contributor(contributor)
+                        # prj.add_contributor(contributor)
+                        prj_contri.append(contributor)
                         break
-                prj_contri.append(contributor)
-                        
+
+            prj.is_proj_spec_satisfied(prj_contri)                
                         
         days = days + 1
-        
+
 def project_release(prj_execution,current_day ):
     '''
     '''
@@ -115,6 +117,4 @@ def project_release(prj_execution,current_day ):
     
     return released_proj, released_contri
             
-    
-
 main()
